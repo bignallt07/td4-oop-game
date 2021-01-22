@@ -4,10 +4,26 @@
 
 const startButton = document.querySelector("#btn__reset");
 
-const game = new Game;
+const keyboardDiv = document.querySelector("#qwerty");
 
+let game;
+
+// Create new instance of the game class
+
+
+// Event Listeners for start button
 startButton.addEventListener("click", (e) => {
+    game = new Game;
     game.startGame(startButton);
+});
+
+
+// event listeners for onscreen keyboard buttons
+keyboardDiv.addEventListener("click", (e) => {
+    const element = e.target;
+    if (element.tagName === "BUTTON") {
+        game.handleInteraction(element);
+    } 
 });
 
 

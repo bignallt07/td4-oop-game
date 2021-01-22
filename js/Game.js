@@ -45,30 +45,29 @@ class Game {
             // c. if wrong guess, add wrong class to the keyboard button and call remove life
             // d. if correct letter guess add chosen css class to keyboard button, call showmatchedletter and checkforwin
                 // e. If player wins - call game over
-    handleInteraction() {
-        const keyboardArray = document.querySelectorAll("#qwerty button");
-        for (let i = 0; i < keyboardArray.length; i++) {
-            keyboardArray[i].addEventListener("click", e => {
-                const chosenLetterElement = e.target;
-                chosenLetterElement.disabled = true;
-                const letter = e.target.textContent;
-                if (this.passPhrase.checkLetter(letter)) {
-                    this.passPhrase.showMatchedLetter(letter);
-                    chosenLetterElement.classList.add("chosen");
-                    const winner = this.checkForWin();
-                    if (winner) {
-                        this.win = true;
-                        this.gameOver();
-                    } 
-                } else {
-                    chosenLetterElement.classList.add("wrong");
-                    this.removeLife();
-                    if (this.missed > 4) {
-                        this.gameOver();
-                    }
+    handleInteraction(el) {
+        if (el !== undefined) {                                 // when function loads, before button is pressed, el is undefined
+            const chosenLetterElement = el;                    
+            chosenLetterElement.disabled = true;
+            const letter = el.textContent;
+            if (this.passPhrase.checkLetter(letter)) {
+                this.passPhrase.showMatchedLetter(letter);
+                chosenLetterElement.classList.add("chosen");
+                const winner = this.checkForWin();
+                if (winner) {
+                    this.win = true;
+                    this.gameOver();
+                    this.resetGame();
+                } 
+            } else {
+                chosenLetterElement.classList.add("wrong");
+                this.removeLife();
+                if (this.missed > 4) {
+                    this.gameOver();
+                    this.resetGame();
                 }
-            });
-        }
+            }
+        }  
     }
 
     // 4. removeLife
@@ -86,7 +85,7 @@ class Game {
     // 5. checkForWin
         // a. has player revealed all letters
     checkForWin() {
-        const ul = document.querySelector("#phrase ul")
+        const ul = document.querySelector("#phrase ul");
         const li = ul.children;
         const liArray = [];
         for (let i = 0; i < li.length; i++) {
@@ -116,6 +115,18 @@ class Game {
             h1.textContent = `Unlucky, the phrase was "${this.activePhrase}"`;
         }
         overlay.style.display = "flex";
+    }
+
+    resetGame() {
+        const ul = document.querySelector("#phrase ul");
+        ul.innerHTML = "";
+        const keys = document.querySelectorAll("#qwerty button");
+        for (let i =0; i < keys.length; i++) {
+            keys[i].className = "key";
+            keys[i].disabled = false;
+        }
+        const lives = document.querySelectorAll("#scoreboard img");
+        lives.forEach(life => life.src="images/liveHeart.png");
     }
     
 }
