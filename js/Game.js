@@ -1,10 +1,8 @@
-/* Treehouse FSJS Techdegree
- * Project 4 - OOP Game App
- * Game.js */
+/************************
+ * Game.js - class 
+ ***********************/
 
-//  Game Class
 class Game {
-    // Constructor with 3 properties
     constructor() {
         this.missed = 0;
         this.phrases = ["Nottingham Forest are Magic", "We arent in Kansas anymore", "Do you know the muffin man", "Lets go redsox", "Can you smell what the Rock is Cooking"]; 
@@ -13,68 +11,79 @@ class Game {
         this.win = false;
     }
 
-    // Methods
-    // 1. startGame
-        // a. Hide start screen overlay
-        // b. Calls random phrase method
-        // c. sets active phrase property to chosen phrase
-        // d. calls addphrasetodisplay
+    /*******
+     * Game class Methods
+     ******/
 
+    /**
+     * startGame method
+     * Description: 1) Removes start overlay 2) Creates new Phrase and updates properties 3) Sets up the webpage
+     * 
+     * @param {*} btn - Button pressed from the event listener 
+     * @returns - Updates properties and prepares page
+     */
     startGame(btn) {
         const overlay = btn.parentNode;
         overlay.style.display = "none";
         this.activePhrase = this.getRandomPhrase();
-        const phrase = new Phrase(this.activePhrase);
-        this.passPhrase = phrase;
-        phrase.addPhraseToDisplay();
-
-        // Console Tests - Ensure you delete
-        this.handleInteraction();
+        this.passPhrase = new Phrase(this.activePhrase);
+        this.passPhrase.addPhraseToDisplay();
     }
 
-    // 2. getRandomPhrase
-        // a. randomly recieves one phrase from array and returns it
+    /**
+     * getRandomPhrase Method
+     * Description: Creates a random number and returns phrase
+     * 
+     * @returns - Phrase to store in property
+     */
     getRandomPhrase() {
         const randomNumber = Math.floor(Math.random() * this.phrases.length + 1) - 1;    // Because we want 0 index number
         return this.phrases[randomNumber]; 
     }
 
-    // 3. handleInteraction - GAME LOGIC -                                                                           I AM HERE!!!!!!
-        // a. checks to see if button clicked, matches letter in phrase - if correct, and incorrect
-            // b. disable letters onscreen keyboard button
-            // c. if wrong guess, add wrong class to the keyboard button and call remove life
-            // d. if correct letter guess add chosen css class to keyboard button, call showmatchedletter and checkforwin
-                // e. If player wins - call game over
+    /**
+     * handleInteraction Method
+     * Description: Manages the interaction within game play. Focuses on:
+     *              1. Disabled pressed keys
+     *              2. Checks to see if the event letter matches a letter in the phrase
+     *                  a) If yes, checks to see if the game is won
+     *                  b) If no, calls removeLife method
+     *              3. Calls gameOver and resetGame methods, and updates DOM classes depending on events 
+     * 
+     * @param {event} el - Event letter from the listener  
+     * @returns - Runs through plays, and ends if necessary
+     */
+
+    
     handleInteraction(el) {
-        if (el !== undefined) {                                 // when function loads, before button is pressed, el is undefined
-            const chosenLetterElement = el;                    
-            chosenLetterElement.disabled = true;
-            const letter = el.textContent;
-            if (this.passPhrase.checkLetter(letter)) {
-                this.passPhrase.showMatchedLetter(letter);
-                chosenLetterElement.classList.add("chosen");
-                const winner = this.checkForWin();
-                if (winner) {
-                    this.win = true;
-                    this.gameOver();
-                    this.resetGame();
-                } 
-            } else {
-                chosenLetterElement.classList.add("wrong");
-                this.removeLife();
-                if (this.missed > 4) {
-                    this.gameOver();
-                    this.resetGame();
-                }
+        const chosenLetterElement = el;                    
+        chosenLetterElement.disabled = true;
+        const letter = el.textContent;
+        if (this.passPhrase.checkLetter(letter)) {
+            this.passPhrase.showMatchedLetter(letter);
+            chosenLetterElement.classList.add("chosen");
+            const winner = this.checkForWin();
+            if (winner) {
+                this.win = true;     // Updates property
+                this.gameOver();
+                this.resetGame();
+            } 
+        } else {
+            chosenLetterElement.classList.add("wrong");
+            this.removeLife();
+            if (this.missed > 4) {
+                this.gameOver();
+                this.resetGame();
             }
         }  
     }
 
-    // 4. removeLife
-        // a. remove life from scoreboard
-        // b. switch images
-        // c. Add to missed property
-        // d. 5 misses = gameOver
+    /**
+     * removeLife Method
+     * Description: Updates heart image and missed property each time it is called
+     * 
+     * @returns updated properties
+     */
     removeLife() {
         const scoreBoardLi = document.querySelectorAll("#scoreboard li");
         const img = scoreBoardLi[this.missed].firstElementChild;
@@ -82,8 +91,15 @@ class Game {
         this.missed++;
     }
 
-    // 5. checkForWin
-        // a. has player revealed all letters
+    /**
+     * checkForWin Method
+     * Description: Checks to see if the game has been won. Focuses on:
+     *              1. Collecting all the guessed letters in an array
+     *              2. Array is joined, to create a string
+     *              3. String is compared to the passPhrase property to determine outcome
+     * 
+     * @returns {boolean} - won = true / lost = false
+     */
     checkForWin() {
         const ul = document.querySelector("#phrase ul");
         const li = ul.children;
@@ -102,21 +118,36 @@ class Game {
         }
     }
 
-    // 6. GameOver
-        // a. display start screen overlay but with new message depending on win or lose
-        // b. replace overlay class with win/lose class
+    /**
+     * gameOver Method
+     * Description: Depending on win or lose, updates the game overlay
+     * 
+     * @returns - overlay style and updated message
+     */
     gameOver() {
         const h1 = overlay.firstElementChild.nextElementSibling;
         if (this.win) {
             overlay.classList.add("win");
+            overlay.classList.remove("lose");
             h1.textContent = "Congratulations, you beat me!";
         } else {
             overlay.classList.add("lose");
+            overlay.classList.remove("win");
             h1.textContent = `Unlucky, the phrase was "${this.activePhrase}"`;
         }
         overlay.style.display = "flex";
     }
 
+
+    /**
+     * resetGame Method
+     * Description: Resets the game by resetting:
+     *              1. DOM (removing phrase list items)
+     *              2. Re-enables buttons
+     *              3. Restores lives images
+     * 
+     * @returns - reset game
+     */
     resetGame() {
         const ul = document.querySelector("#phrase ul");
         ul.innerHTML = "";
@@ -128,6 +159,5 @@ class Game {
         const lives = document.querySelectorAll("#scoreboard img");
         lives.forEach(life => life.src="images/liveHeart.png");
     }
-    
 }
     
