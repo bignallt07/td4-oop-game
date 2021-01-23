@@ -32,12 +32,12 @@ keyboardDiv.addEventListener("click", (e) => {
 });
 
 
+document.addEventListener("keyup", (e) => {
+    const keys = document.querySelectorAll("#qwerty button");
+    for (let i = 0; i < keys.length; i++) {
+        if (keys[i].textContent === e.key) {
+            game.handleInteraction(keys[i]);
+        }
+    }
+});
 
-
-// document.addEventListener("keyup", (e) => {
-//     const letter = e.key;
-//     const letterTest = phrase1.checkLetter(letter);
-//     if (letterTest) {
-//         phrase1.showMatchedLetter(letter);
-//     };
-// });

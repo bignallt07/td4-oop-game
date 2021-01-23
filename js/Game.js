@@ -5,10 +5,12 @@
 class Game {
     constructor() {
         this.missed = 0;
-        this.phrases = ["Nottingham Forest are Magic", "We arent in Kansas anymore", "Do you know the muffin man", "Lets go redsox", "Can you smell what the Rock is Cooking"]; 
+        this.phrases = [new Phrase("Nottingham Forest are Magic"),
+            new Phrase("We arent in Kansas anymore"), 
+            new Phrase("Do you know the muffin man"), 
+            new Phrase("Lets go redsox"), 
+            new Phrase("Can you smell what the Rock is Cooking")]
         this.activePhrase = null;
-        this.passPhrase = null;
-        this.win = false;
     }
 
     /*******
@@ -26,18 +28,17 @@ class Game {
         const overlay = btn.parentNode;
         overlay.style.display = "none";
         this.activePhrase = this.getRandomPhrase();
-        this.passPhrase = new Phrase(this.activePhrase);
-        this.passPhrase.addPhraseToDisplay();
+        this.activePhrase.addPhraseToDisplay();
     }
 
     /**
      * getRandomPhrase Method
-     * Description: Creates a random number and returns phrase
+     * Description: Creates a random number and returns phrase from array
      * 
      * @returns - Phrase to store in property
      */
     getRandomPhrase() {
-        const randomNumber = Math.floor(Math.random() * this.phrases.length + 1) - 1;    // Because we want 0 index number
+        const randomNumber = Math.floor(Math.random() * this.phrases.length);    // Because we want 0 index number\
         return this.phrases[randomNumber]; 
     }
 
@@ -56,26 +57,18 @@ class Game {
 
     
     handleInteraction(el) {
-        const chosenLetterElement = el;                    
-        chosenLetterElement.disabled = true;
+        const chosenLetterElement = el;  
+        chosenLetterElement.disabled = true;                  
         const letter = el.textContent;
-        if (this.passPhrase.checkLetter(letter)) {
-            this.passPhrase.showMatchedLetter(letter);
+        if (this.activePhrase.checkLetter(letter)) {
+            this.activePhrase.showMatchedLetter(letter);
             chosenLetterElement.classList.add("chosen");
-            const winner = this.checkForWin();
-            if (winner) {
-                this.win = true;     // Updates property
-                this.gameOver();
-                this.resetGame();
-            } 
+            this.checkForWin();
         } else {
             chosenLetterElement.classList.add("wrong");
             this.removeLife();
-            if (this.missed > 4) {
-                this.gameOver();
-                this.resetGame();
-            }
         }  
+        
     }
 
     /**
@@ -89,6 +82,10 @@ class Game {
         const img = scoreBoardLi[this.missed].firstElementChild;
         img.src = "images/lostHeart.png";
         this.missed++;
+        if (this.missed > 4) {
+            this.gameOver(false);
+            this.resetGame();
+            }
     }
 
     /**
@@ -111,11 +108,10 @@ class Game {
         }
 
         const guessed = liArray.join("");
-        if (guessed === this.passPhrase.phrase) {
-            return true;
-        } else {
-            return false;
-        }
+        if (guessed === this.activePhrase.phrase) {
+            this.gameOver(true);
+            this.resetGame();
+        } 
     }
 
     /**
@@ -124,16 +120,16 @@ class Game {
      * 
      * @returns - overlay style and updated message
      */
-    gameOver() {
+    gameOver(win) {
         const h1 = overlay.firstElementChild.nextElementSibling;
-        if (this.win) {
+        if (win) {
             overlay.classList.add("win");
             overlay.classList.remove("lose");
             h1.textContent = "Congratulations, you beat me!";
         } else {
             overlay.classList.add("lose");
             overlay.classList.remove("win");
-            h1.textContent = `Unlucky, the phrase was "${this.activePhrase}"`;
+            h1.textContent = `Unlucky, the phrase was "${this.activePhrase.full}"`;   // Full returns the uppercase on lose to demo the answer
         }
         overlay.style.display = "flex";
     }
