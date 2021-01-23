@@ -146,7 +146,7 @@ class Game {
      */
     resetGame() {
         const ul = document.querySelector("#phrase ul");
-        ul.innerHTML = "";
+        ul.innerHTML = "";          // RESETS BOARD
         const keys = document.querySelectorAll("#qwerty button");
         for (let i =0; i < keys.length; i++) {
             keys[i].className = "key";
