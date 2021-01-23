@@ -6,6 +6,7 @@
 
 const startButton = document.querySelector("#btn__reset");
 const keyboardDiv = document.querySelector("#qwerty");
+const overlay = document.querySelector("#overlay");
 let game;
 
 /*******
@@ -33,11 +34,18 @@ keyboardDiv.addEventListener("click", (e) => {
 
 
 document.addEventListener("keyup", (e) => {
-    const keys = document.querySelectorAll("#qwerty button");
-    for (let i = 0; i < keys.length; i++) {
-        if (keys[i].textContent === e.key) {
-            game.handleInteraction(keys[i]);
+    if (game.over) {
+        e.preventDefault();
+    } else {
+        const keys = document.querySelectorAll("#qwerty button");
+        for (let i = 0; i < keys.length; i++) {
+            if (keys[i].textContent === e.key) {
+                game.handleInteraction(keys[i]);
+            }
         }
     }
+    
+    
 });
+
 

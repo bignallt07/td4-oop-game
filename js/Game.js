@@ -11,6 +11,7 @@ class Game {
             new Phrase("Lets go redsox"), 
             new Phrase("Can you smell what the Rock is Cooking")]
         this.activePhrase = null;
+        this.over = false;
     }
 
     /*******
@@ -79,13 +80,18 @@ class Game {
      */
     removeLife() {
         const scoreBoardLi = document.querySelectorAll("#scoreboard li");
-        const img = scoreBoardLi[this.missed].firstElementChild;
-        img.src = "images/lostHeart.png";
-        this.missed++;
+        // To ensure that more than 5 hearts aren't updated
+        if (this.missed < 5) {
+            const img = scoreBoardLi[this.missed].firstElementChild;
+            img.src = "images/lostHeart.png";
+            this.missed++;
+        }
+        // To ensure that game reset is done at 5
         if (this.missed > 4) {
             this.gameOver(false);
             this.resetGame();
-            }
+        }
+        
     }
 
     /**
@@ -121,6 +127,7 @@ class Game {
      * @returns - overlay style and updated message
      */
     gameOver(win) {
+        this.over = true;               // Allows preventDefault on the keyup eventlisteners
         const h1 = overlay.firstElementChild.nextElementSibling;
         if (win) {
             overlay.classList.add("win");
@@ -156,4 +163,3 @@ class Game {
         lives.forEach(life => life.src="images/liveHeart.png");
     }
 }
-    
