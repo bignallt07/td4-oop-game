@@ -180,6 +180,7 @@ button {
 
 footer {
   margin: 0;
+  height: 100px;
 }
 
 footer img {
@@ -249,4 +250,23 @@ footer img {
   background: #a14052;
   position: relative;
   transition: all 3s ease-in;
+}
+
+/* Media Quieries */
+@media screen and (max-width: 820px) {
+  footer {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .keyboard-images {
+    display: none;
+  }
+}
+
+@media screen and (max-height: 600px) {
+  footer {
+    display: none;
+  }
 }

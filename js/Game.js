@@ -59,20 +59,23 @@ class Game {
 
     
     handleInteraction(el) {
-        const chosenLetterElement = el;  
-        chosenLetterElement.disabled = true;                  
-        const letter = el.textContent;
-        if (this.activePhrase.checkLetter(letter)) {
-            this.activePhrase.showMatchedLetter(letter);
-            chosenLetterElement.classList.add("chosen");
-            const win = this.checkForWin();
-            if (win) {
-                this.gameOver(win);
-            }
-        } else {
-            chosenLetterElement.classList.add("wrong");
-            this.removeLife();
-        }  
+        const chosenLetterElement = el; 
+        if (chosenLetterElement.disabled === false) {
+            chosenLetterElement.disabled = true;                 
+            const letter = el.textContent;
+            if (this.activePhrase.checkLetter(letter)) {
+                this.activePhrase.showMatchedLetter(letter);
+                chosenLetterElement.classList.add("chosen");
+                const win = this.checkForWin();
+                if (win) {
+                    this.gameOver(win);
+                }
+            } else {
+                chosenLetterElement.classList.add("wrong");
+                this.removeLife();
+            } 
+        } 
+         
         
     }
 
