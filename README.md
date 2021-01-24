@@ -33,6 +33,7 @@ This game also is targeted at achieving the "exceeds" status from Treehouse Tech
 3. keyboard-area styled to with flex and designed to look like a cinema screen
 4. qwerty id styled to help with the cinema screen effect
 5. Footer styled, with image stretched to 100%
+6. Added Media quieries to remove added displays if on a smaller screen
 
 6. Opening curtain effect on page load (only). This is designed from looking at varieties of the same effect online. However, the HTML and CSS structure and advice came from Tom Hughes (https://speckyboy.com/curtain-effect-web-design/)
 
