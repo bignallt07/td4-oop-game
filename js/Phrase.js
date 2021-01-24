@@ -5,7 +5,8 @@
 class Phrase {
     constructor(phrase) {
         this.phrase = phrase.toLowerCase();
-        this.letters = this.phrase.split("");
+        // Additional Properties
+        this.letters = this.phrase.split("");                           
         this.full = phrase;  // added to allow orginal caps on lose screen
     }
     

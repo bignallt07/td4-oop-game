@@ -5,12 +5,13 @@
 class Game {
     constructor() {
         this.missed = 0;
-        this.phrases = [new Phrase("Nottingham Forest are Magic"),
-            new Phrase("We arent in Kansas anymore"), 
-            new Phrase("Do you know the muffin man"), 
-            new Phrase("Lets go redsox"), 
-            new Phrase("Can you smell what the Rock is Cooking")]
+        this.phrases = [new Phrase("Hey you guys"),
+            new Phrase("To infinity and beyond"), 
+            new Phrase("Milk was a bad choice"), 
+            new Phrase("I feel the need the need for speed"), 
+            new Phrase("Houston we have a problem")]
         this.activePhrase = null;
+        // Additional Properties
         this.over = false;
     }
 
@@ -64,7 +65,10 @@ class Game {
         if (this.activePhrase.checkLetter(letter)) {
             this.activePhrase.showMatchedLetter(letter);
             chosenLetterElement.classList.add("chosen");
-            this.checkForWin();
+            const win = this.checkForWin();
+            if (win) {
+                this.gameOver(win);
+            }
         } else {
             chosenLetterElement.classList.add("wrong");
             this.removeLife();
@@ -89,7 +93,6 @@ class Game {
         // To ensure that game reset is done at 5
         if (this.missed > 4) {
             this.gameOver(false);
-            this.resetGame();
         }
         
     }
@@ -115,9 +118,10 @@ class Game {
 
         const guessed = liArray.join("");
         if (guessed === this.activePhrase.phrase) {
-            this.gameOver(true);
-            this.resetGame();
-        } 
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -139,6 +143,7 @@ class Game {
             h1.textContent = `Unlucky, the phrase was "${this.activePhrase.full}"`;   // Full returns the uppercase on lose to demo the answer
         }
         overlay.style.display = "flex";
+        this.resetGame()
     }
 
 
