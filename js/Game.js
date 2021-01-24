@@ -51,10 +51,10 @@ class Game {
      *              2. Checks to see if the event letter matches a letter in the phrase
      *                  a) If yes, checks to see if the game is won
      *                  b) If no, calls removeLife method
-     *              3. Calls gameOver and resetGame methods, and updates DOM classes depending on events 
+     *              3. Calls gameOver and removeLife methods, and updates DOM classes depending on events 
      * 
      * @param {event} el - Event letter from the listener  
-     * @returns - Runs through plays, and ends if necessary
+     * @returns - Runs through plays, and ends game if necessary
      */
 
     
@@ -90,7 +90,7 @@ class Game {
             img.src = "images/lostHeart.png";
             this.missed++;
         }
-        // To ensure that game reset is done at 5
+        // Call game over if missed attempts reaches 5
         if (this.missed > 4) {
             this.gameOver(false);
         }
@@ -102,7 +102,7 @@ class Game {
      * Description: Checks to see if the game has been won. Focuses on:
      *              1. Collecting all the guessed letters in an array
      *              2. Array is joined, to create a string
-     *              3. String is compared to the passPhrase property to determine outcome
+     *              3. String is compared to the activePhrase property to determine outcome
      * 
      * @returns {boolean} - won = true / lost = false
      */
@@ -136,7 +136,7 @@ class Game {
         if (win) {
             overlay.classList.add("win");
             overlay.classList.remove("lose");
-            h1.textContent = "Congratulations, you beat me!";
+            h1.textContent = "Congratulations, you know your movies!";
         } else {
             overlay.classList.add("lose");
             overlay.classList.remove("win");
@@ -158,7 +158,7 @@ class Game {
      */
     resetGame() {
         const ul = document.querySelector("#phrase ul");
-        ul.innerHTML = "";          // RESETS BOARD
+        ul.innerHTML = "";          // RESETS UL BOARD
         const keys = document.querySelectorAll("#qwerty button");
         for (let i =0; i < keys.length; i++) {
             keys[i].className = "key";

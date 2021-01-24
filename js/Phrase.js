@@ -67,7 +67,7 @@ class Phrase {
             if (li[i].textContent === letter) {
                 li[i].classList.remove("hide");
                 li[i].classList.add("show");
-                }
+            }
         }
     }
 
